@@ -23,7 +23,6 @@ def main():
         #accelerator='cpu',#("gpu" if torch.cuda.is_available() else 'cpu'),
         accelerator = 'mps',
         devices = 1,
-        num_workers = 5,  
         max_epochs=5,
         fast_dev_run=False,
         logger=pl.loggers.TensorBoardLogger("logs/", name="class", version=1),
