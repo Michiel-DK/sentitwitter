@@ -3,8 +3,8 @@ import pytorch_lightning as pl
 from pytorch_lightning.callbacks import ModelCheckpoint
 from pytorch_lightning.callbacks.early_stopping import EarlyStopping
 
-from sentitwitter.data import DataModule
-from sentitwitter.model import ClassModel
+from model.sentitwitter.data import DataModule
+from model.sentitwitter.model import ClassModel
 
 
 def main():
