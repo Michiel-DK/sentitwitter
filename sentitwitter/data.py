@@ -10,7 +10,7 @@ class DataModule(pl.LightningDataModule):
     
     """Class to import dataset from Hugging Face and split into train/val"""
     
-    def __init__(self, model_name="google/bert_uncased_L-2_H-128_A-2", batch_size=32, val_size=0.2, random_state=42, stratify=True):
+    def __init__(self, model_name="distilbert/distilbert-base-uncased", batch_size=32, val_size=0.2, random_state=42, stratify=True):
         super().__init__()
 
         self.batch_size = batch_size
@@ -43,12 +43,12 @@ class DataModule(pl.LightningDataModule):
         if stage == "fit" or stage is None:
             self.train_data = self.train_data.map(self.tokenize_data, batched=True)
             self.train_data.set_format(
-                type="torch", columns=['date', 'id', 'username', 'text', 'party', 'labels', 'embeddings', 'input_ids', 'token_type_ids', 'attention_mask']
+                type="torch", columns=['date', 'id', 'username', 'text', 'party', 'labels', 'embeddings', 'input_ids', 'attention_mask']
             )
 
             self.val_data = self.val_data.map(self.tokenize_data, batched=True)
             self.val_data.set_format(
-                type="torch", columns=['date', 'id', 'username', 'text', 'party', 'labels', 'embeddings', 'input_ids', 'token_type_ids', 'attention_mask']
+                type="torch", columns=['date', 'id', 'username', 'text', 'party', 'labels', 'embeddings', 'input_ids', 'attention_mask']
             )
 
     def train_dataloader(self):
