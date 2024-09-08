@@ -21,12 +21,12 @@ class SamplesVisualisationLogger(pl.Callback):
         val_batch = next(iter(self.datamodule.val_dataloader()))
         sentences = val_batch["text"]
 
-        outputs = pl_module(val_batch["input_ids"], val_batch["attention_mask"])
+        outputs = pl_module(val_batch["input_ids"].to('mps'), val_batch["attention_mask"].to('mps'), val_batch['labels'].to('mps'))
         preds = torch.argmax(outputs.logits, 1)
         labels = val_batch["labels"]
 
         df = pd.DataFrame(
-            {"Sentence": sentences, "Label": labels.numpy(), "Predicted": preds.numpy()}
+            {"Sentence": sentences, "Label": labels.cpu().numpy(), "Predicted": preds.cpu().numpy()}
         )
 
         wrong_df = df[df["Label"] != df["Predicted"]]
@@ -51,15 +51,17 @@ def main():
     wandb_logger = WandbLogger(project='sentitwitter')
 
     trainer = pl.Trainer(
-        default_root_dir="logs",
         #accelerator='cpu',#("gpu" if torch.cuda.is_available() else 'cpu'),
         accelerator = 'mps',
         devices = 1,
-        max_epochs=5,
+        max_epochs=1,
         fast_dev_run=False,
         #logger=pl.loggers.TensorBoardLogger("logs/", name="class", version=1),
         logger = wandb_logger,
         callbacks=[checkpoint_callback, early_stopping_callback, SamplesVisualisationLogger(class_data)],
+        log_every_n_steps=10,
+        deterministic=True,
+        num_sanity_val_steps=1
     )
     trainer.fit(class_model, class_data)
 

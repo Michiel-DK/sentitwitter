@@ -20,7 +20,10 @@ class ClassModel(pl.LightningModule):
         self.num_classes = 2
         self.task = 'binary'
         
-        self.validation_step_outputs = []
+        self.training_step_outputs = []
+        self.training_step_targets = []
+
+        self.val_step_outputs = []
         self.val_step_targets = []
         
         #metrics
@@ -49,11 +52,19 @@ class ClassModel(pl.LightningModule):
         
         preds = torch.argmax(outputs.logits, 1)
         train_acc = self.train_accuracy_metric(preds, batch["labels"])
+        
+        self.training_step_outputs = preds
+        self.training_step_targets = batch["labels"]
 
         self.log("train/loss", outputs.loss, prog_bar=True, on_epoch=True)
         self.log("train/acc", train_acc, prog_bar=True, on_epoch=True)
         
         return outputs.loss
+    
+    def on_train_epoch_end(self):
+        
+        self.training_step_outputs.clear()
+        self.training_step_targets.clear()
 
     def validation_step(self, batch, batch_idx):
         
@@ -61,8 +72,10 @@ class ClassModel(pl.LightningModule):
         
         outputs = self.forward(batch["input_ids"], batch["attention_mask"], labels=batch["labels"])
         preds = torch.argmax(outputs.logits, 1)
-                
-        self.validation_step_outputs.append(outputs)
+        
+        #import ipdb;ipdb.set_trace()
+        
+        self.val_step_outputs.append(preds)
         self.val_step_targets.append(labels)
         
         # Metrics
@@ -74,7 +87,7 @@ class ClassModel(pl.LightningModule):
         f1 = self.f1_metric(preds, labels)
 
         # Logging metrics
-        self.log("valid/loss", outputs.loss, prog_bar=True, on_step=True)
+        self.log("valid/loss", outputs.loss, prog_bar=True, on_epoch=True)
         self.log("valid/acc", valid_acc, prog_bar=True, on_epoch=True)
         self.log("valid/precision_macro", precision_macro, prog_bar=True, on_epoch=True)
         self.log("valid/recall_macro", recall_macro, prog_bar=True, on_epoch=True)
@@ -85,16 +98,14 @@ class ClassModel(pl.LightningModule):
 
     def on_validation_epoch_end(self):
         
-        import ipdb;ipdb.set_trace()
         #labels = torch.cat([x["labels"] for x in self.validation_step_outputs[-1]])
         #logits = torch.cat([x["logits"] for x in self.validation_step_outputs])
-        logits = self.validation_step_outputs[-1].logits
-        labels = self.val_step_targets[-1]
-        
-        self.validation_step_outputs.clear()
+        #import ipdb;ipdb.set_trace()
+        preds = self.val_step_outputs[0]
+        labels = self.val_step_targets[0]
+                
+        self.val_step_outputs.clear()
         self.val_step_targets.clear()
-        
-        preds = torch.argmax(logits, 1)
 
         ## There are multiple ways to track the metrics
         # # 1. Confusion matrix plotting using inbuilt W&B method
