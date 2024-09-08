@@ -42,6 +42,10 @@ class DataModule(pl.LightningDataModule):
     def setup(self, stage=None):
         if stage == "fit" or stage is None:
             self.train_data = self.train_data.map(self.tokenize_data, batched=True)
+            
+            ### REMOVE COLUMNS FOR SPEED?
+            ###dataset = dataset.remove_columns(['A', 'B', 'C', 'D', 'E', 'F'])
+            
             self.train_data.set_format(
                 type="torch", columns=['date', 'id', 'username', 'text', 'party', 'labels', 'embeddings', 'input_ids', 'attention_mask']
             )
