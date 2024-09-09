@@ -64,6 +64,8 @@ def main():
         num_sanity_val_steps=1
     )
     trainer.fit(class_model, class_data)
+    
+    wandb.finish()
 
 
 if __name__ == "__main__":
