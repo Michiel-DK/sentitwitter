@@ -53,9 +53,9 @@ class ClassModel(pl.LightningModule):
         preds = torch.argmax(outputs.logits, 1)
         train_acc = self.train_accuracy_metric(preds, batch["labels"])
         
-        self.training_step_outputs = preds
-        self.training_step_targets = batch["labels"]
-
+        self.training_step_outputs.append(preds)
+        self.training_step_targets.append(batch["labels"])
+        
         self.log("train/loss", outputs.loss, prog_bar=True, on_epoch=True)
         self.log("train/acc", train_acc, prog_bar=True, on_epoch=True)
         
@@ -77,7 +77,7 @@ class ClassModel(pl.LightningModule):
         
         self.val_step_outputs.append(preds)
         self.val_step_targets.append(labels)
-        
+                
         # Metrics
         valid_acc = self.val_accuracy_metric(preds, labels)
         precision_macro = self.precision_macro_metric(preds, labels)
@@ -103,7 +103,7 @@ class ClassModel(pl.LightningModule):
         #import ipdb;ipdb.set_trace()
         preds = self.val_step_outputs[0]
         labels = self.val_step_targets[0]
-                
+                        
         self.val_step_outputs.clear()
         self.val_step_targets.clear()
 
