@@ -3,7 +3,7 @@ from sentitwitter.model import ClassModel
 from sentitwitter.data import DataModule
 
 
-class ColaPredictor:
+class ClassPredictor:
     def __init__(self, model_path):
         self.model_path = model_path
         self.model = ClassModel.load_from_checkpoint(model_path)
@@ -29,5 +29,5 @@ class ColaPredictor:
 
 if __name__ == "__main__":
     sentence = "Right-wing extremists are fanning the flames of hate and picking on trans children in states across the country. It’s sickening."
-    predictor = ColaPredictor("./models/epoch=0-step=499.ckpt")
+    predictor = ClassPredictor("./models/best-checkpoint.ckpt.ckpt")
     print(predictor.predict(sentence))
