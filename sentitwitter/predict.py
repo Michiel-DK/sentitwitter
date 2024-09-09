@@ -17,8 +17,8 @@ class ColaPredictor:
         inference_sample = {"text": text}
         processed = self.processor.tokenize_data(inference_sample)
         logits = self.model(
-            torch.tensor([processed["input_ids"]]).to('mps'),
-            torch.tensor([processed["attention_mask"]]).to('mps'),
+            torch.tensor([processed["input_ids"]]),#.to('mps'),
+            torch.tensor([processed["attention_mask"]]),#.to('mps'),
         )
         scores = self.softmax(logits[0]).tolist()
         predictions = []

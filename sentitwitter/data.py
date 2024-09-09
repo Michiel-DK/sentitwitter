@@ -23,9 +23,9 @@ class DataModule(pl.LightningDataModule):
         tweets_dataset = load_dataset("m-newhauser/senator-tweets")
         
         if self.stratify:
-            tweets_dataset_split = tweets_dataset['train'].train_test_split(test_size=self.val_size, seed=self.random_state, stratify_by_column='labels')
+            tweets_dataset_split = tweets_dataset['train'].train_test_split(test_size=0.2, seed=self.random_state, stratify_by_column='labels')
         else:
-            tweets_dataset_split = tweets_dataset['train'].train_test_split(test_size=self.val_size, seed=self.random_state)
+            tweets_dataset_split = tweets_dataset['train'].train_test_split(test_size=0.2, seed=self.random_state)
 
         self.train_data = tweets_dataset_split['train']
         self.val_data = tweets_dataset_split['test']
@@ -42,6 +42,10 @@ class DataModule(pl.LightningDataModule):
     def setup(self, stage=None):
         if stage == "fit" or stage is None:
             self.train_data = self.train_data.map(self.tokenize_data, batched=True)
+            
+            ### REMOVE COLUMNS FOR SPEED?
+            ###dataset = dataset.remove_columns(['A', 'B', 'C', 'D', 'E', 'F'])
+            
             self.train_data.set_format(
                 type="torch", columns=['date', 'id', 'username', 'text', 'party', 'labels', 'embeddings', 'input_ids', 'attention_mask']
             )
