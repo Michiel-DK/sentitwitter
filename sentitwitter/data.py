@@ -23,9 +23,9 @@ class DataModule(pl.LightningDataModule):
         tweets_dataset = load_dataset("m-newhauser/senator-tweets")
         
         if self.stratify:
-            tweets_dataset_split = tweets_dataset['train'].train_test_split(test_size=0.01, train_size=0.01, seed=self.random_state, stratify_by_column='labels')
+            tweets_dataset_split = tweets_dataset['train'].train_test_split(test_size=0.3, seed=self.random_state, stratify_by_column='labels')
         else:
-            tweets_dataset_split = tweets_dataset['train'].train_test_split(test_size=0.01, train_size=0.01, seed=self.random_state)
+            tweets_dataset_split = tweets_dataset['train'].train_test_split(test_size=0.3, seed=self.random_state)
 
         self.train_data = tweets_dataset_split['train']
         self.val_data = tweets_dataset_split['test']

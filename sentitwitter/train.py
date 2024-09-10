@@ -57,7 +57,7 @@ def main():
         #accelerator=("gpu" if torch.cuda.is_available() else 'cpu'),
         accelerator = 'mps',
         devices = 1,
-        max_epochs=1,
+        max_epochs=10,
         fast_dev_run=False,
         #logger=pl.loggers.TensorBoardLogger("logs/", name="class", version=1),
         logger = wandb_logger,
