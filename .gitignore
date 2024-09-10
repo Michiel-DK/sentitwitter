@@ -7,3 +7,5 @@ models/
 logs/
 results/
 wandb/
+gcp_key/
+.DS_Store

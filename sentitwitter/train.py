@@ -6,6 +6,9 @@ from pytorch_lightning.callbacks.early_stopping import EarlyStopping
 from sentitwitter.data import DataModule
 from sentitwitter.model import ClassModel
 
+from sentitwitter.model_to_onnx import convert_model
+from sentitwitter.registry import save_model
+
 from pytorch_lightning.loggers import WandbLogger
 
 import wandb
@@ -51,7 +54,7 @@ def main():
     wandb_logger = WandbLogger(project='sentitwitter')
 
     trainer = pl.Trainer(
-        #accelerator='cpu',#("gpu" if torch.cuda.is_available() else 'cpu'),
+        #accelerator=("gpu" if torch.cuda.is_available() else 'cpu'),
         accelerator = 'mps',
         devices = 1,
         max_epochs=1,
@@ -66,6 +69,10 @@ def main():
     trainer.fit(class_model, class_data)
     
     wandb.finish()
+    
+    path = convert_model()
+    
+    save_model('sentitwitter_onx', path)
 
 
 if __name__ == "__main__":
