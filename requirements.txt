@@ -8,12 +8,14 @@ astunparse==1.6.3
 async-timeout==4.0.3
 attrs==24.2.0
 backoff==2.2.1
+cachetools==5.5.0
 certifi==2024.8.30
 charset-normalizer==3.3.2
 click==8.1.7
 coloredlogs==15.0.1
 comm==0.2.2
 datasets==2.21.0
+DateTime==5.5
 debugpy==1.8.5
 decorator==5.1.1
 dill==0.3.8
@@ -27,9 +29,18 @@ fsspec==2024.6.1
 gast==0.6.0
 gitdb==4.0.11
 GitPython==3.1.43
+google-api-core==2.19.2
+google-auth==2.34.0
 google-cloud==0.34.0
+google-cloud-bigquery==3.25.0
+google-cloud-core==2.4.1
+google-cloud-storage==2.18.2
+google-crc32c==1.6.0
 google-pasta==0.2.0
+google-resumable-media==2.7.2
+googleapis-common-protos==1.65.0
 grpcio==1.66.1
+grpcio-status==1.66.1
 h5py==3.11.0
 huggingface-hub==0.24.6
 humanfriendly==10.0
@@ -71,11 +82,14 @@ parso==0.8.4
 pexpect==4.9.0
 platformdirs==4.2.2
 prompt_toolkit==3.0.47
-protobuf==4.25.4
+proto-plus==1.24.0
+protobuf==5.28.0
 psutil==6.0.0
 ptyprocess==0.7.0
 pure_eval==0.2.3
 pyarrow==17.0.0
+pyasn1==0.6.0
+pyasn1_modules==0.4.0
 Pygments==2.18.0
 python-dateutil==2.9.0.post0
 pytorch-lightning==2.4.0
@@ -86,11 +100,12 @@ regex==2024.7.24
 requests==2.32.3
 requests-oauthlib==2.0.0
 rich==13.8.0
+rsa==4.9
 safetensors==0.4.5
 scikit-learn==1.5.1
 scipy==1.14.1
 scrapfly-sdk==0.8.17
--e git+ssh://git@github.com/Michiel-DK/sentitwitter.git@c7cf107b1f7692d3416dd225a6cfffa346ba27be#egg=sentitwitter
+-e git+ssh://git@github.com/Michiel-DK/sentitwitter.git@37e6155ee6c814a7ce7f764d74af16d9c3d94175#egg=sentitwitter
 sentry-sdk==2.13.0
 setproctitle==1.3.3
 six==1.16.0
@@ -121,3 +136,4 @@ Werkzeug==3.0.4
 wrapt==1.16.0
 xxhash==3.5.0
 yarl==1.10.0
+zope.interface==7.0.3
