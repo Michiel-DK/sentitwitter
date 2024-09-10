@@ -1,9 +1,7 @@
-import torch
 from google.cloud import storage
 
-def save_model(model, bucket_name, model_path):
+def save_model(bucket_name, model_name):
     storage_client = storage.Client()
     bucket = storage_client.bucket(bucket_name)
-    blob = bucket.blob(f"{model_path}.onnx")
-    with blob.open("wb", ignore_flush=True) as f:
-        f.write()
+    blob = bucket.blob(f"models/{model_name}")
+    blob.upload_from_filename(f"models/{model_name}", timeout=300)

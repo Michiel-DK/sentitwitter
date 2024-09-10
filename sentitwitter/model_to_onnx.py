@@ -5,6 +5,8 @@ from sentitwitter.data import DataModule
 
 import torch
 
+import datetime
+
 
 logger = logging.getLogger(__name__)
 
@@ -27,11 +29,15 @@ def convert_model():
         "labels": input_batch["labels"]
     }
     
+    current_stamp = datetime.datetime.now()
+    
+    model_name = f'model_{str(current_stamp)}'
+    
     logger.info("Converting model to ONNX")
     torch.onnx.export(
         class_model,
         (input_sample["input_ids"], input_sample["attention_mask"]),
-        f"{output_path}/model.onnx",
+        f"{output_path}/{model_name}.onnx",
         export_params=True,
         opset_version=11,
         input_names=["input_ids", "attention_mask"],
@@ -44,8 +50,10 @@ def convert_model():
     )
 
     logger.info(
-        f"Model converted successfully. ONNX format model is at: {output_path}/model.onnx"
+        f"Model converted successfully. ONNX format model is at: {output_path}/{model_name}.onnx"
     )
+    
+    return f"{model_name}.onnx"
 
 
 if __name__ == "__main__":
